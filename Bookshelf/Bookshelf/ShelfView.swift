@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-//var testArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
-var testArray:[String] = ["Item 1","Item 2","Item 3"]
+//var titleArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
+var titleArray:[String] = ["Item 1","Item 2","Item 3"]
 
 struct ShelfView: View {
     @State private var listType = 0
@@ -57,8 +57,12 @@ struct ShelfView: View {
                 ListTypeSegmentedView(listType: self.$listType)
             }
             
-            ScrollView {
-                ShelfByImageBodyView()
+            ZStack {
+                if listType == 0 {
+                    ShelfByImageBodyView()
+                } else if listType == 1 {
+                    ShelfByListBodyView()
+                }
             }
         }
     }
@@ -72,32 +76,34 @@ struct ShelfView_Previews: PreviewProvider {
 
 struct ShelfByImageBodyView: View {
     var body: some View {
-        ForEach(0 ..< testArray.count, id:\.self){
-            index in
-            if isSecondElement(index:index) {
-                HStack{
-                    Spacer()
-                    Text(testArray[index-1])
-                        .frame(width: 100)
-                    Spacer()
-                    Text(testArray[index])
-                        .frame(width: 100)
-                    Spacer()
+        ScrollView {
+            ForEach(0 ..< titleArray.count, id:\.self){
+                index in
+                if isSecondElement(index:index) {
+                    HStack{
+                        Spacer()
+                        Text(titleArray[index-1])
+                            .frame(width: 100)
+                        Spacer()
+                        Text(titleArray[index])
+                            .frame(width: 100)
+                        Spacer()
+                    }
+                    .frame(height: 100)
                 }
-                .frame(height: 100)
-            }
-            
-            if self.checkDatasSingle(index: index) {
-                HStack{
-                    Spacer()
-                    Text(testArray[index])
-                        .frame(width: 100)
-                    Spacer()
-                    Text("")
-                        .frame(width: 100)
-                    Spacer()
+                
+                if self.checkDatasSingle(index: index) {
+                    HStack{
+                        Spacer()
+                        Text(titleArray[index])
+                            .frame(width: 100)
+                        Spacer()
+                        Text("")
+                            .frame(width: 100)
+                        Spacer()
+                    }
+                    .frame(height: 100)
                 }
-                .frame(height: 100)
             }
         }
     }
@@ -105,7 +111,17 @@ struct ShelfByImageBodyView: View {
         return index % 2 == 1
     }
     func checkDatasSingle(index:Int)->Bool{
-        return (testArray.count-1)%2 == 0 && index == (testArray.count-1)
+        return (titleArray.count-1)%2 == 0 && index == (titleArray.count-1)
+    }
+}
+
+struct ShelfByListBodyView: View {
+    var body: some View {
+        List(titleArray, id:\.self){
+            title in
+            Text(title)
+        }
+        .listStyle(.grouped)
     }
 }
 
