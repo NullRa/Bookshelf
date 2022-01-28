@@ -61,7 +61,7 @@ struct ShelfView: View {
             
             ZStack {
                 if listType == 0 {
-                    ShelfByImageBodyView(selectedItemData: $selectedItemData, showDetailView: $showDetailView)
+                    ShelfByImageBodyView(selectedItemData: $selectedItemData, showDetailView: $showDetailView, typeBtnString:$typeBtnString)
                 } else if listType == 1 {
                     ShelfByListBodyView(showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                 }
@@ -118,16 +118,26 @@ struct ShelfView_Previews: PreviewProvider {
 struct ShelfByImageBodyView: View {
     @Binding var selectedItemData: ItemData?
     @Binding var showDetailView: Bool
+    @Binding var typeBtnString: String
     var body: some View {
         ScrollView {
-            ForEach(0 ..< testItemDatas.itemDatas.count, id:\.self){
+            ForEach(0 ..< testItemDatas.getItemDatasByFliterType(type:typeBtnString).count, id:\.self){
                 index in
+                if testItemDatas.getItemDatasByFliterType(type:typeBtnString).count == 1 {
+                    HStack{
+                        Spacer()
+                        ShelfImageView(itemData: testItemDatas.getItemDatasByFliterType(type:typeBtnString)[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        Spacer()
+                        ShelfImageView(itemData: nil, showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        Spacer()
+                    }
+                }
                 if isSecondElement(index:index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas.itemDatas[index-1], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas.getItemDatasByFliterType(type:typeBtnString)[index-1], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas.itemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas.getItemDatasByFliterType(type:typeBtnString)[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
                     }
                 }
@@ -135,7 +145,7 @@ struct ShelfByImageBodyView: View {
                 if self.checkDatasSingle(index: index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas.itemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas.getItemDatasByFliterType(type:typeBtnString)[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
                         ShelfImageView(itemData: nil, showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()

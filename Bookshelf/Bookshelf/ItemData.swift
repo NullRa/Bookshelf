@@ -50,4 +50,18 @@ struct TestItemDatas {
         }
         return typeList
     }
+    
+    func getItemDatasByFliterType(type:String) -> [ItemData]{
+        if type == "全部" {
+            return itemDatas
+        }
+        
+        var itemList = [ItemData]()
+        for itemData in itemDatas {
+            if itemData.type == type {
+                itemList.append(itemData)
+            }
+        }
+        return itemList
+    }
 }
