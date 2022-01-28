@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
-//var titleArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
-var titleArray:[String] = ["Item 1","Item 2","Item 3"]
+var titleArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
+//var titleArray:[String] = ["Item 1","Item 2","Item 3"]
 
 struct ShelfView: View {
+    @State var showView = false
     @State private var listType = 0
     var body: some View {
         VStack{
@@ -59,10 +60,19 @@ struct ShelfView: View {
             
             ZStack {
                 if listType == 0 {
-                    ShelfByImageBodyView()
+                    ShelfByImageBodyView(showView: $showView)
                 } else if listType == 1 {
                     ShelfByListBodyView()
                 }
+            }
+        }
+        .sheet(isPresented: $showView) {
+            showView = false
+        } content: {
+            Button {
+                showView = false
+            } label: {
+                Text("Hi and Bye !")
             }
         }
     }
@@ -75,6 +85,7 @@ struct ShelfView_Previews: PreviewProvider {
 }
 
 struct ShelfByImageBodyView: View {
+    @Binding var showView: Bool
     var body: some View {
         ScrollView {
             ForEach(0 ..< titleArray.count, id:\.self){
@@ -82,27 +93,21 @@ struct ShelfByImageBodyView: View {
                 if isSecondElement(index:index) {
                     HStack{
                         Spacer()
-                        Text(titleArray[index-1])
-                            .frame(width: 100)
+                        ShelfImageView(title: titleArray[index-1], showView: $showView)
                         Spacer()
-                        Text(titleArray[index])
-                            .frame(width: 100)
+                        ShelfImageView(title: titleArray[index], showView: $showView)
                         Spacer()
                     }
-                    .frame(height: 100)
                 }
                 
                 if self.checkDatasSingle(index: index) {
                     HStack{
                         Spacer()
-                        Text(titleArray[index])
-                            .frame(width: 100)
+                        ShelfImageView(title: titleArray[index], showView: $showView)
                         Spacer()
-                        Text("")
-                            .frame(width: 100)
+                        ShelfImageView(title: "", showView: $showView)
                         Spacer()
                     }
-                    .frame(height: 100)
                 }
             }
         }
@@ -137,6 +142,35 @@ struct ListTypeSegmentedView: View {
             .pickerStyle(.segmented)
             .frame(width: 200)
             .padding(.trailing,15)
+        }
+    }
+}
+
+struct ShelfImageView: View {
+    var title:String
+    @Binding var showView: Bool
+    var body: some View {
+        VStack{
+            Image(systemName: "house")
+                .resizable()
+                .padding(10)
+            VStack(alignment:.leading){
+                HStack {
+                    Text(title)
+                    Spacer()
+                }
+                Text("評價")
+                Text("進度")
+                Text("標籤")
+            }
+            .padding(.bottom, 5)
+            .padding(.leading, 10)
+        }
+        .frame(width: (UIScreen.main.bounds.width-60)/2, height: UIScreen.main.bounds.height/3)
+        .background(.blue)
+        .cornerRadius(20)
+        .onTapGesture {
+            showView = true
         }
     }
 }
