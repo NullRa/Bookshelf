@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
-//var titleArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
-//var titleArray:[String] = ["Item 1","Item 2","Item 3"]
 
 struct ShelfView: View {
     @State var showView = false
     @State private var listType = 0
+    @State var selectedItemData: ItemData?// = testItemDatas[0]
     var body: some View {
         VStack{
             VStack(alignment: .leading, spacing: nil) {
@@ -60,7 +59,7 @@ struct ShelfView: View {
             
             ZStack {
                 if listType == 0 {
-                    ShelfByImageBodyView(showView: $showView)
+                    ShelfByImageBodyView(selectedItemData: $selectedItemData, showView: $showView)
                 } else if listType == 1 {
                     ShelfByListBodyView(showView: $showView)
                 }
@@ -68,11 +67,16 @@ struct ShelfView: View {
         }
         .sheet(isPresented: $showView) {
             showView = false
+            selectedItemData = nil
         } content: {
-            Button {
-                showView = false
-            } label: {
-                Text("Hi and Bye !")
+            if let selectedItemData = selectedItemData {
+                ShelfDetailView(itemData: selectedItemData)
+            } else {
+                Button {
+                    showView = false
+                } label: {
+                    Text("點擊關閉畫面,可惡出錯了")
+                }
             }
         }
     }
@@ -85,6 +89,7 @@ struct ShelfView_Previews: PreviewProvider {
 }
 
 struct ShelfByImageBodyView: View {
+    @Binding var selectedItemData: ItemData?
     @Binding var showView: Bool
     var body: some View {
         ScrollView {
@@ -93,9 +98,9 @@ struct ShelfByImageBodyView: View {
                 if isSecondElement(index:index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index-1], showView: $showView)
+                        ShelfImageView(itemData: testItemDatas[index-1], showView: $showView, selectedItemData: $selectedItemData)
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index], showView: $showView)
+                        ShelfImageView(itemData: testItemDatas[index], showView: $showView, selectedItemData: $selectedItemData)
                         Spacer()
                     }
                 }
@@ -103,9 +108,9 @@ struct ShelfByImageBodyView: View {
                 if self.checkDatasSingle(index: index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index], showView: $showView)
+                        ShelfImageView(itemData: testItemDatas[index], showView: $showView, selectedItemData: $selectedItemData)
                         Spacer()
-                        ShelfImageView(itemData: nil, showView: $showView)
+                        ShelfImageView(itemData: nil, showView: $showView, selectedItemData: $selectedItemData)
                         Spacer()
                     }
                 }
@@ -122,6 +127,7 @@ struct ShelfByImageBodyView: View {
 
 struct ShelfByListBodyView: View {
     @Binding var showView: Bool
+//    @Binding var selectedItemData: ItemData?
     var body: some View {
         List(testItemDatas.indices, id: \.self){
             index in
@@ -151,9 +157,9 @@ struct ListTypeSegmentedView: View {
 }
 
 struct ShelfImageView: View {
-    //    var title:String
     var itemData: ItemData?
     @Binding var showView: Bool
+    @Binding var selectedItemData: ItemData?
     var body: some View {
         if let itemData = itemData {
             VStack{
@@ -185,6 +191,7 @@ struct ShelfImageView: View {
             .background(Color(red: 230/255, green: 222/255, blue: 193/255))
             .cornerRadius(20)
             .onTapGesture {
+                selectedItemData = itemData
                 showView = true
             }
         } else {
