@@ -87,12 +87,12 @@ struct ShelfView: View {
                 Text("全部")
             }
             
-            ForEach(testItemDatas.indices, id: \.self){
+            ForEach(testItemDatas.itemDatas.indices, id: \.self){
                 index in
                 Button {
                     showTypeView = false
                 } label: {
-                    Text(testItemDatas[index].type)
+                    Text(testItemDatas.itemDatas[index].type)
                 }
             }
 
@@ -117,14 +117,14 @@ struct ShelfByImageBodyView: View {
     @Binding var showDetailView: Bool
     var body: some View {
         ScrollView {
-            ForEach(0 ..< testItemDatas.count, id:\.self){
+            ForEach(0 ..< testItemDatas.itemDatas.count, id:\.self){
                 index in
                 if isSecondElement(index:index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index-1], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas.itemDatas[index-1], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas.itemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
                     }
                 }
@@ -132,7 +132,7 @@ struct ShelfByImageBodyView: View {
                 if self.checkDatasSingle(index: index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas.itemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
                         ShelfImageView(itemData: nil, showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
@@ -145,7 +145,7 @@ struct ShelfByImageBodyView: View {
         return index % 2 == 1
     }
     func checkDatasSingle(index:Int)->Bool{
-        return (testItemDatas.count-1)%2 == 0 && index == (testItemDatas.count-1)
+        return (testItemDatas.itemDatas.count-1)%2 == 0 && index == (testItemDatas.itemDatas.count-1)
     }
 }
 
@@ -153,12 +153,12 @@ struct ShelfByListBodyView: View {
     @Binding var showDetailView: Bool
     @Binding var selectedItemData: ItemData?
     var body: some View {
-        List(testItemDatas.indices, id: \.self){
+        List(testItemDatas.itemDatas.indices, id: \.self){
             index in
-            Text(testItemDatas[index].title)
+            Text(testItemDatas.itemDatas[index].title)
                 .onTapGesture {
                     showDetailView = true
-                    selectedItemData = testItemDatas[index]
+                    selectedItemData = testItemDatas.itemDatas[index]
                 }
         }
         .listStyle(.grouped)
