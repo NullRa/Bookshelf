@@ -173,14 +173,12 @@ struct ShelfImageView: View {
                         Text("標籤: \(itemData.getTagsString())")
                         Spacer()
                     }
-                    
-                    
                 }
                 .padding(.bottom, 5)
                 .padding(.leading, 10)
             }
             .frame(width: (UIScreen.main.bounds.width-60)/2, height: UIScreen.main.bounds.height/3)
-            .background(.blue)
+            .background(Color(red: 230/255, green: 222/255, blue: 193/255))
             .cornerRadius(20)
             .onTapGesture {
                 showView = true
@@ -188,7 +186,7 @@ struct ShelfImageView: View {
         } else {
             Text("No Info")
                 .frame(width: (UIScreen.main.bounds.width-60)/2, height: UIScreen.main.bounds.height/3)
-                .background(.blue)
+                .background(Color(red: 230/255, green: 222/255, blue: 193/255))
                 .cornerRadius(20)
         }
     }
