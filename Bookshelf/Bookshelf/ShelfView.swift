@@ -87,12 +87,12 @@ struct ShelfView: View {
                 Text("全部")
             }
             
-            ForEach(testItemDatas.itemDatas.indices, id: \.self){
+            ForEach(testItemDatas.getTypeList().indices, id: \.self){
                 index in
                 Button {
                     showTypeView = false
                 } label: {
-                    Text(testItemDatas.itemDatas[index].type)
+                    Text(testItemDatas.getTypeList()[index])
                 }
             }
 
