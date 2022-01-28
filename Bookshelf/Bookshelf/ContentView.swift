@@ -14,7 +14,7 @@ struct ContentView: View {
             Spacer()
             ZStack {
                 if self.selection == 0 {
-                    Text("Bookshelf View")
+                    ShelfView()
                 } else if self.selection == 1 {
                     Text("Search View")
                 }
