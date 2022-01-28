@@ -195,3 +195,39 @@ struct ShelfImageView: View {
         }
     }
 }
+
+struct ShelfDetailView: View {
+    var itemData: ItemData
+    var body: some View {
+        ScrollView {
+            VStack {
+                Image(systemName: itemData.image)
+                    .resizable()
+                    .scaledToFit()
+                Spacer()
+                HStack(){
+                    Text("Title: \(itemData.title)")
+                    Spacer()
+                }
+                .padding(.leading, 10)
+                HStack(){
+                    Text("進度: \(itemData.processing)")
+                    Spacer()
+                }
+                .padding(.leading,10)
+                
+                HStack(){
+                    Text("評價: \(itemData.praise)")
+                    Spacer()
+                }
+                .padding(.leading,10)
+                Spacer()
+                HStack(){
+                    Text("心得: ")
+                    Spacer()
+                }
+                .padding(.leading,10)
+            }
+        }
+    }
+}
