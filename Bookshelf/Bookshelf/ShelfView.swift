@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-var titleArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
+//var titleArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
 //var titleArray:[String] = ["Item 1","Item 2","Item 3"]
 
 struct ShelfView: View {
@@ -88,14 +88,14 @@ struct ShelfByImageBodyView: View {
     @Binding var showView: Bool
     var body: some View {
         ScrollView {
-            ForEach(0 ..< titleArray.count, id:\.self){
+            ForEach(0 ..< testItemDatas.count, id:\.self){
                 index in
                 if isSecondElement(index:index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(title: titleArray[index-1], showView: $showView)
+                        ShelfImageView(itemData: testItemDatas[index-1], showView: $showView)
                         Spacer()
-                        ShelfImageView(title: titleArray[index], showView: $showView)
+                        ShelfImageView(itemData: testItemDatas[index], showView: $showView)
                         Spacer()
                     }
                 }
@@ -103,9 +103,9 @@ struct ShelfByImageBodyView: View {
                 if self.checkDatasSingle(index: index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(title: titleArray[index], showView: $showView)
+                        ShelfImageView(itemData: testItemDatas[index], showView: $showView)
                         Spacer()
-                        ShelfImageView(title: "", showView: $showView)
+                        ShelfImageView(itemData: nil, showView: $showView)
                         Spacer()
                     }
                 }
@@ -116,15 +116,15 @@ struct ShelfByImageBodyView: View {
         return index % 2 == 1
     }
     func checkDatasSingle(index:Int)->Bool{
-        return (titleArray.count-1)%2 == 0 && index == (titleArray.count-1)
+        return (testItemDatas.count-1)%2 == 0 && index == (testItemDatas.count-1)
     }
 }
 
 struct ShelfByListBodyView: View {
     var body: some View {
-        List(titleArray, id:\.self){
-            title in
-            Text(title)
+        List(testItemDatas.indices, id: \.self){
+            index in
+            Text(testItemDatas[index].title)
         }
         .listStyle(.grouped)
     }
@@ -147,30 +147,49 @@ struct ListTypeSegmentedView: View {
 }
 
 struct ShelfImageView: View {
-    var title:String
+    //    var title:String
+    var itemData: ItemData?
     @Binding var showView: Bool
     var body: some View {
-        VStack{
-            Image(systemName: "house")
-                .resizable()
-                .padding(10)
-            VStack(alignment:.leading){
-                HStack {
-                    Text(title)
-                    Spacer()
+        if let itemData = itemData {
+            VStack{
+                Image(systemName: itemData.image)
+                    .resizable()
+                    .padding(10)
+                VStack(alignment:.leading){
+                    HStack {
+                        Text("title: \(itemData.title)")
+                        Spacer()
+                    }
+                    HStack {
+                        Text("評價: \(itemData.praise)")
+                        Spacer()
+                    }
+                    HStack {
+                        Text("進度: \(itemData.processing)")
+                        Spacer()
+                    }
+                    HStack {
+                        Text("標籤: \(itemData.getTagsString())")
+                        Spacer()
+                    }
+                    
+                    
                 }
-                Text("評價")
-                Text("進度")
-                Text("標籤")
+                .padding(.bottom, 5)
+                .padding(.leading, 10)
             }
-            .padding(.bottom, 5)
-            .padding(.leading, 10)
-        }
-        .frame(width: (UIScreen.main.bounds.width-60)/2, height: UIScreen.main.bounds.height/3)
-        .background(.blue)
-        .cornerRadius(20)
-        .onTapGesture {
-            showView = true
+            .frame(width: (UIScreen.main.bounds.width-60)/2, height: UIScreen.main.bounds.height/3)
+            .background(.blue)
+            .cornerRadius(20)
+            .onTapGesture {
+                showView = true
+            }
+        } else {
+            Text("No Info")
+                .frame(width: (UIScreen.main.bounds.width-60)/2, height: UIScreen.main.bounds.height/3)
+                .background(.blue)
+                .cornerRadius(20)
         }
     }
 }
