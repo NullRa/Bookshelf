@@ -10,6 +10,7 @@ import SwiftUI
 var testArray:[String] = ["Item 1","Item 2","Item 3"]
 
 struct ShelfView: View {
+    @State private var listType = 0
     var body: some View {
         VStack{
             VStack(alignment: .leading, spacing: nil) {
@@ -52,10 +53,12 @@ struct ShelfView: View {
                 }.padding(.leading,20)
                 Divider()
                     .padding([.trailing,.leading],20)
+                
+                ListTypeSegmentedView(listType: self.$listType)
             }
             
             ScrollView {
-                ShelfBodyView()
+                ShelfByImageBodyView()
             }
         }
     }
@@ -67,7 +70,7 @@ struct ShelfView_Previews: PreviewProvider {
     }
 }
 
-struct ShelfBodyView: View {
+struct ShelfByImageBodyView: View {
     var body: some View {
         ForEach(0 ..< testArray.count, id:\.self){
             index in
@@ -103,5 +106,21 @@ struct ShelfBodyView: View {
     }
     func checkDatasSingle(index:Int)->Bool{
         return (testArray.count-1)%2 == 0 && index == (testArray.count-1)
+    }
+}
+
+struct ListTypeSegmentedView: View {
+    @Binding var listType: Int
+    var body: some View {
+        HStack {
+            Spacer()
+            Picker("segmentedPicker", selection: $listType) {
+                Text("圖表").tag(0)
+                Text("清單").tag(1)
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 200)
+            .padding(.trailing,15)
+        }
     }
 }
