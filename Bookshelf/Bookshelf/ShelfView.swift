@@ -6,11 +6,54 @@
 //
 
 import SwiftUI
-var testArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
+//var testArray:[String] = ["Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17","Item 18","Item 19","Item 20","Item 21"]
+var testArray:[String] = ["Item 1","Item 2","Item 3"]
 
 struct ShelfView: View {
     var body: some View {
         VStack{
+            VStack(alignment: .leading, spacing: nil) {
+                HStack{
+                    Spacer()
+                    Button {
+                        
+                    } label: {
+                        Text("編輯")
+                            .foregroundColor(.gray)
+                            .padding(.trailing)
+                    }
+                }
+                
+                HStack{
+                    Text("書架")
+                        .font(.system(.largeTitle, design: .rounded))
+                    Spacer()
+                }
+                .padding(.leading,10)
+                
+                Divider()
+                    .padding([.trailing,.leading],20)
+                
+                HStack{
+                    Button {
+                        
+                    } label: {
+                        HStack{
+                            Image(systemName: "list.bullet")
+                                .foregroundColor(.black)
+                            Text("全部")
+                                .foregroundColor(.black)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                                .padding(.trailing)
+                        }
+                    }
+                }.padding(.leading,20)
+                Divider()
+                    .padding([.trailing,.leading],20)
+            }
+            
             ScrollView {
                 ShelfBodyView()
             }
