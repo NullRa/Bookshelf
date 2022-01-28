@@ -12,6 +12,7 @@ struct ShelfView: View {
     @State private var listType = 0
     @State var selectedItemData: ItemData?// = testItemDatas[0]
     @State var showTypeView = false
+    @State var typeBtnString = "全部"
     var body: some View {
         VStack{
             VStack(alignment: .leading, spacing: nil) {
@@ -43,7 +44,7 @@ struct ShelfView: View {
                         HStack{
                             Image(systemName: "list.bullet")
                                 .foregroundColor(.black)
-                            Text("全部")
+                            Text(typeBtnString)
                                 .foregroundColor(.black)
                             Spacer()
                             Image(systemName: "chevron.right")
@@ -83,6 +84,7 @@ struct ShelfView: View {
         .alert("選擇顯示類別", isPresented: $showTypeView) {
             Button {
                 showTypeView = false
+                typeBtnString = "全部"
             } label: {
                 Text("全部")
             }
@@ -91,6 +93,7 @@ struct ShelfView: View {
                 index in
                 Button {
                     showTypeView = false
+                    typeBtnString = testItemDatas.getTypeList()[index]
                 } label: {
                     Text(testItemDatas.getTypeList()[index])
                 }
