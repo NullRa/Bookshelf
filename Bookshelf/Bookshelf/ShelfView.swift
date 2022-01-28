@@ -61,7 +61,7 @@ struct ShelfView: View {
                 if listType == 0 {
                     ShelfByImageBodyView(selectedItemData: $selectedItemData, showView: $showView)
                 } else if listType == 1 {
-                    ShelfByListBodyView(showView: $showView)
+                    ShelfByListBodyView(showView: $showView, selectedItemData: $selectedItemData)
                 }
             }
         }
@@ -127,13 +127,14 @@ struct ShelfByImageBodyView: View {
 
 struct ShelfByListBodyView: View {
     @Binding var showView: Bool
-//    @Binding var selectedItemData: ItemData?
+    @Binding var selectedItemData: ItemData?
     var body: some View {
         List(testItemDatas.indices, id: \.self){
             index in
             Text(testItemDatas[index].title)
                 .onTapGesture {
                     showView = true
+                    selectedItemData = testItemDatas[index]
                 }
         }
         .listStyle(.grouped)
