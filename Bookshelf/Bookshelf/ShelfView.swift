@@ -11,6 +11,7 @@ struct ShelfView: View {
     @State var showDetailView = false
     @State private var listType = 0
     @State var selectedItemData: ItemData?// = testItemDatas[0]
+    @State var showTypeView = false
     var body: some View {
         VStack{
             VStack(alignment: .leading, spacing: nil) {
@@ -37,7 +38,7 @@ struct ShelfView: View {
                 
                 HStack{
                     Button {
-                        
+                        showTypeView = true
                     } label: {
                         HStack{
                             Image(systemName: "list.bullet")
@@ -78,6 +79,29 @@ struct ShelfView: View {
                     Text("點擊關閉畫面,可惡出錯了")
                 }
             }
+        }
+        .alert("選擇顯示類別", isPresented: $showTypeView) {
+            Button {
+                showTypeView = false
+            } label: {
+                Text("全部")
+            }
+            
+            ForEach(testItemDatas.indices, id: \.self){
+                index in
+                Button {
+                    showTypeView = false
+                } label: {
+                    Text(testItemDatas[index].type)
+                }
+            }
+
+            Button {
+                showTypeView = false
+            } label: {
+                Text("取消")
+            }
+
         }
     }
 }
