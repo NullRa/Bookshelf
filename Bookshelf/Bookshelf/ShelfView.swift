@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ShelfView: View {
-    @State var showView = false
+    @State var showDetailView = false
     @State private var listType = 0
     @State var selectedItemData: ItemData?// = testItemDatas[0]
     var body: some View {
@@ -59,21 +59,21 @@ struct ShelfView: View {
             
             ZStack {
                 if listType == 0 {
-                    ShelfByImageBodyView(selectedItemData: $selectedItemData, showView: $showView)
+                    ShelfByImageBodyView(selectedItemData: $selectedItemData, showDetailView: $showDetailView)
                 } else if listType == 1 {
-                    ShelfByListBodyView(showView: $showView, selectedItemData: $selectedItemData)
+                    ShelfByListBodyView(showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                 }
             }
         }
-        .sheet(isPresented: $showView) {
-            showView = false
+        .sheet(isPresented: $showDetailView) {
+            showDetailView = false
             selectedItemData = nil
         } content: {
             if let selectedItemData = selectedItemData {
                 ShelfDetailView(itemData: selectedItemData)
             } else {
                 Button {
-                    showView = false
+                    showDetailView = false
                 } label: {
                     Text("點擊關閉畫面,可惡出錯了")
                 }
@@ -90,7 +90,7 @@ struct ShelfView_Previews: PreviewProvider {
 
 struct ShelfByImageBodyView: View {
     @Binding var selectedItemData: ItemData?
-    @Binding var showView: Bool
+    @Binding var showDetailView: Bool
     var body: some View {
         ScrollView {
             ForEach(0 ..< testItemDatas.count, id:\.self){
@@ -98,9 +98,9 @@ struct ShelfByImageBodyView: View {
                 if isSecondElement(index:index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index-1], showView: $showView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas[index-1], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index], showView: $showView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
                     }
                 }
@@ -108,9 +108,9 @@ struct ShelfByImageBodyView: View {
                 if self.checkDatasSingle(index: index) {
                     HStack{
                         Spacer()
-                        ShelfImageView(itemData: testItemDatas[index], showView: $showView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: testItemDatas[index], showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
-                        ShelfImageView(itemData: nil, showView: $showView, selectedItemData: $selectedItemData)
+                        ShelfImageView(itemData: nil, showDetailView: $showDetailView, selectedItemData: $selectedItemData)
                         Spacer()
                     }
                 }
@@ -126,14 +126,14 @@ struct ShelfByImageBodyView: View {
 }
 
 struct ShelfByListBodyView: View {
-    @Binding var showView: Bool
+    @Binding var showDetailView: Bool
     @Binding var selectedItemData: ItemData?
     var body: some View {
         List(testItemDatas.indices, id: \.self){
             index in
             Text(testItemDatas[index].title)
                 .onTapGesture {
-                    showView = true
+                    showDetailView = true
                     selectedItemData = testItemDatas[index]
                 }
         }
@@ -159,7 +159,7 @@ struct ListTypeSegmentedView: View {
 
 struct ShelfImageView: View {
     var itemData: ItemData?
-    @Binding var showView: Bool
+    @Binding var showDetailView: Bool
     @Binding var selectedItemData: ItemData?
     var body: some View {
         if let itemData = itemData {
@@ -193,7 +193,7 @@ struct ShelfImageView: View {
             .cornerRadius(20)
             .onTapGesture {
                 selectedItemData = itemData
-                showView = true
+                showDetailView = true
             }
         } else {
             Text("No Info")
@@ -205,36 +205,44 @@ struct ShelfImageView: View {
 }
 
 struct ShelfDetailView: View {
+    @Environment(\.dismiss) var dismiss
     var itemData: ItemData
     var body: some View {
-        ScrollView {
-            VStack {
-                Image(systemName: itemData.image)
-                    .resizable()
-                    .scaledToFit()
-                Spacer()
-                HStack(){
-                    Text("Title: \(itemData.title)")
+        VStack {
+            ScrollView {
+                VStack {
+                    Image(systemName: itemData.image)
+                        .resizable()
+                        .scaledToFit()
                     Spacer()
-                }
-                .padding(.leading, 10)
-                HStack(){
-                    Text("進度: \(itemData.processing)")
+                    HStack(){
+                        Text("Title: \(itemData.title)")
+                        Spacer()
+                    }
+                    .padding(.leading, 10)
+                    HStack(){
+                        Text("進度: \(itemData.processing)")
+                        Spacer()
+                    }
+                    .padding(.leading,10)
+                    
+                    HStack(){
+                        Text("評價: \(itemData.praise)")
+                        Spacer()
+                    }
+                    .padding(.leading,10)
                     Spacer()
+                    HStack(){
+                        Text("心得: ")
+                        Spacer()
+                    }
+                    .padding(.leading,10)
                 }
-                .padding(.leading,10)
-                
-                HStack(){
-                    Text("評價: \(itemData.praise)")
-                    Spacer()
-                }
-                .padding(.leading,10)
-                Spacer()
-                HStack(){
-                    Text("心得: ")
-                    Spacer()
-                }
-                .padding(.leading,10)
+            }
+            Button {
+                dismiss()
+            } label: {
+                Text("關閉畫面")
             }
         }
     }
